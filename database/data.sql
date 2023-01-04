@@ -1,4 +1,2 @@
-insert into "groups" ("groupInfo","groupPicture","userId","groupName")
-
-values ("Group to discuss about coding", '/images/image-1608316435111.png',
-'1','LFZ student group')
+insert into "groups" ("caption", "url", "groupName")
+values ('LFZ Logo', '/images/image-1608316435111.png', 'Learning Fuze');

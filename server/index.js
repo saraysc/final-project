@@ -1,8 +1,9 @@
 require('dotenv/config');
 const path = require('path');
 const pg = require('pg');
-const ClientError = require('./client-error');
 const express = require('express');
+const ClientError = require('./client-error');
+
 const staticMiddleware = require('./static-middleware');
 const errorMiddleware = require('./error-middleware');
 const uploadsMiddleware = require('./uploads-middleware');
@@ -15,30 +16,27 @@ const db = new pg.Pool({
 });
 
 const app = express();
-const publicPath = path.join(__dirname, 'public');
-
 app.use(staticMiddleware);
-app.use(express.static(publicPath));
 app.use(express.json());
 
-app.get('/api/groups', uploadsMiddleware, (req, res, next) => {
-  const groupData = req.body;
-  if (!groupData) {
-    throw new ClientError(400, 'input is a required field');
+app.post('/api/groups', uploadsMiddleware, (req, res, next) => {
+  const { groupName, caption } = req.body;
+  if (!caption || !groupName) {
+    throw new ClientError(400, 'caption is a required field');
   }
-  // const url = path.join('/images', req.file.filename);
+  const url = path.join('/images', req.file.filename);
   const sql = `
-    insert into "groups" ("groupInfo", "groupPicture", "groupName")
-    values ($1,$2,$3)
-    returning *
+  insert into "groups" ("groupName","url","caption")
+  values ($1,$2,$3)
+  returning *
   `;
-  const params = [groupData];
+  const params = [groupName, url, caption];
   db.query(sql, params)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
 
-app.get('/api/groups', (req, res, next) => {
+app.get('/api/groups/', (req, res, next) => {
   const sql = `
     select *
       from "groups"
@@ -53,5 +51,6 @@ app.get('/api/groups', (req, res, next) => {
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
-  process.stdout.write(`\n\napp listening on port ${process.env.PORT}\n\n`);
+  // eslint-disable-next-line no-console
+  console.log(`express server listening on port ${process.env.PORT}`);
 });
