@@ -1,4 +1,30 @@
-header {
+.header {
   background-color: #2b3a55;
   color: #fff;
+}
+
+.link {
+  text-decoration: none;
+  color: #fff;
+  margin-left: 40px;
+  margin-right: 10px;
+}
+
+.main-link-margin {
+  margin-right: 50px;
+  margin-left: 80px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.white {
+  color: #fff !important;
+}
+
+.title-padding {
+  padding-top: 20px;
+}
+
+.align-center {
+  align-items: center;
 }

@@ -22,21 +22,21 @@ app.use(express.json());
 app.post('/api/groups', uploadsMiddleware, (req, res, next) => {
   const { groupName, caption } = req.body;
   if (!caption || !groupName) {
-    throw new ClientError(400, 'caption is a required field');
+    throw new ClientError(400, 'caption/groupName is a required field');
   }
-  const url = path.join('/images', req.file.filename);
+  const image = path.join('/images', req.file.filename);
   const sql = `
-  insert into "groups" ("groupName","url","caption")
+  insert into "groups" ("groupName","image","caption")
   values ($1,$2,$3)
   returning *
   `;
-  const params = [groupName, url, caption];
+  const params = [groupName, image, caption];
   db.query(sql, params)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
 
-app.get('/api/groups/', (req, res, next) => {
+app.get('/api/groups', (req, res, next) => {
   const sql = `
     select *
       from "groups"

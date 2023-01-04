@@ -10,7 +10,7 @@ create schema "public";
 create table "public"."groups" (
   "groupId"        serial,
   "groupName"      text           not null,
-  "url"            text           not null,
+  "image"            text           not null,
   "caption"        text           not null,
   "createdAt"      timestamptz(6) not null default now(),
   primary key ("groupId")
