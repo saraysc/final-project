@@ -48,6 +48,36 @@ app.get('/api/groups', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.post('/api/posts', uploadsMiddleware, (req, res, next) => {
+  const { title, caption } = req.body;
+  if (!caption || !title) {
+    throw new ClientError(400, 'caption/Title is a required field');
+  }
+
+  const image = path.join('/images', req.file.filename);
+  const sql = `
+  insert into "posts" ("title","image","caption")
+  values ($1,$2,$3)
+  returning *
+  `;
+  const params = [title, image, caption];
+  db.query(sql, params)
+    .then(result => res.json(result.rows))
+    .catch(err => next(err));
+});
+
+app.get('/api/posts', (req, res, next) => {
+  const sql = `
+    select *
+      from "posts"
+  `;
+  db.query(sql)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

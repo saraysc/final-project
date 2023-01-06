@@ -3,6 +3,8 @@ import Groups from './pages/groups';
 import { parseRoute } from './lib';
 import Header from './components/header';
 import GroupList from './pages/groupList';
+import PostList from './pages/postList';
+import Posts from './pages/createPosts';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -25,8 +27,18 @@ export default class App extends React.Component {
       return <GroupList />;
     }
     if (route.path === 'groups') {
+      return <PostList />;
+    }
+    if (route.path === 'groupForm') {
       const groupId = route.params.get('groupId');
       return <Groups groupId={groupId} />;
+    }
+    if (route.path === 'postForm') {
+      const postId = route.params.get('postId');
+      return <Posts postId={postId} />;
+    }
+    if (route.path === 'posts') {
+      return <PostList />;
     }
   }
 
