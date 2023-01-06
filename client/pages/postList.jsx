@@ -1,52 +1,50 @@
 import React from 'react';
-
 const styles = {
   product: {
     display: 'block',
     cursor: 'pointer'
   },
   image: {
-    height: '250px',
+    height: '600px',
     objectFit: 'contain'
   },
   description: {
-    height: '3rem',
-    overflow: 'hidden'
+    objectFit: 'contain'
+
   }
 };
 
-export default class GroupList extends React.Component {
+export default class PostList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      groups: []
+      posts: []
     };
   }
 
   componentDidMount() {
-    fetch('/api/groups')
+    fetch('/api/posts')
       .then(res => res.json())
-      .then(groups => this.setState({ groups }));
+      .then(posts => this.setState({ posts }));
   }
 
   render() {
     return (
       <div className="container">
         <div className='row title-padding'>
-          <div className='col-11'><h2>My Groups</h2></div>
+          <div className='col-11'><h2>My Posts</h2></div>
           <div className='col'>
-            <a href='#groupForm'>
+            <a href='#postForm'>
               <i className="title-padding fas fa-plus fa-2xl align-center" />
             </a>
           </div>
-
         </div>
         <hr />
         <div className="row">
           {
-            this.state.groups.map(groups => (
-              <div key={groups.groupId} className="col-12 col-md-6 col-lg-4">
-                <ShowGroup groups={groups} />
+            this.state.posts.map(posts => (
+              <div key={posts.postId} className="col-11">
+                <ShowPosts posts={posts} />
               </div>
             ))
           }
@@ -56,20 +54,21 @@ export default class GroupList extends React.Component {
   }
 }
 
-function ShowGroup(props) {
+function ShowPosts(props) {
   // eslint-disable-next-line no-unused-vars
-  const { groupId, groupName, caption, image } = props.groups;
+  const { postId, title, caption, image } = props.posts;
   /* this anchor should go to product details at `#products?productId=${productId}` */
   return (
     <a
-      href={`#groups?groupId=${groupId}`}
+      href={`#posts?postId=${postId}`}
       style={styles.product}
       className="text-dark card mb-4 shadow-sm text-decoration-none">
-      <img src={image} className="card-img-top" alt={groupName} style={styles.image} />
       <div className="card-body">
-        <h5 className="card-title">{groupName}</h5>
+        <h4 className="card-title">{title}</h4>
+        <img src={image} className="card-img-top" alt={postId} style={styles.image} />
         <p className="card-text" style={styles.description}>{caption}</p>
       </div>
+
     </a>
   );
 }

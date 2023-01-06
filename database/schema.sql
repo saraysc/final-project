@@ -14,4 +14,17 @@ create table "public"."groups" (
   "caption"        text           not null,
   "createdAt"      timestamptz(6) not null default now(),
   primary key ("groupId")
+) WITH(
+  OIDS=FALSE
+);
+
+create table "public"."posts" (
+  "postId"        serial,
+  "title"         text           not null,
+  "image"         text           not null,
+  "caption"       text           not null,
+  "createdAt"     timestamptz(6) not null default now(),
+  primary key ("postId")
+) WITH(
+  OIDS=FALSE
 );
